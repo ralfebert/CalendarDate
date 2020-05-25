@@ -24,22 +24,14 @@ import Foundation
 
 /**
  CalendarDate is a Swift type that represents a Date as year, month and day value.
- Includes support for formatting as a 'yyyy-mm-dd' string and JSON coding as such a string out of the box.
+ Includes support for formatting as a ISO 8601 string ('yyyy-mm-dd') and JSON coding.
  */
-public struct CalendarDate: LosslessStringConvertible, Codable, Equatable, Hashable {
+public struct CalendarDate: Equatable, Hashable {
 
     public let year, month, day: Int
 
     public init() {
         self.init(date: Date())
-    }
-
-    public init?(_ description: String) {
-        if let date = Self.formatter.date(from: description) {
-            self.init(date: date)
-        } else {
-            return nil
-        }
     }
 
     public init(year: Int, month: Int, day: Int) {
@@ -59,6 +51,18 @@ public struct CalendarDate: LosslessStringConvertible, Codable, Equatable, Hasha
         DateComponents(calendar: Calendar.current, year: self.year, month: self.month, day: self.day).date!
     }
 
+}
+
+extension CalendarDate: LosslessStringConvertible {
+
+    public init?(_ description: String) {
+        if let date = Self.formatter.date(from: description) {
+            self.init(date: date)
+        } else {
+            return nil
+        }
+    }
+
     public var description: String {
         Self.formatter.string(from: self.date)
     }
@@ -68,8 +72,9 @@ public struct CalendarDate: LosslessStringConvertible, Codable, Equatable, Hasha
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }()
+}
 
-    // MARK: - JSON coding
+extension CalendarDate: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

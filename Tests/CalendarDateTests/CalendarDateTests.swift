@@ -32,4 +32,22 @@ final class CalendarDateTests: XCTestCase {
         XCTAssertEqual(CalendarDate(str), date)
     }
 
+    func testJSONCoding() throws {
+        let date = CalendarDate(year: 2018, month: 5, day: 3)
+
+        let data = try JSONEncoder().encode(date)
+        XCTAssertEqual(String(data: data, encoding: .utf8), "\"2018-05-03\"")
+
+        let decodedDate = try JSONDecoder().decode(CalendarDate.self, from: data)
+        XCTAssertEqual(date, decodedDate)
+    }
+
+    func testEquals() {
+        let date = CalendarDate(year: 2018, month: 5, day: 3)
+        XCTAssertEqual(date, date)
+        XCTAssertNotEqual(date, CalendarDate(year: 2019, month: 5, day: 3))
+        XCTAssertNotEqual(date, CalendarDate(year: 2018, month: 6, day: 3))
+        XCTAssertNotEqual(date, CalendarDate(year: 2018, month: 5, day: 4))
+    }
+
 }
