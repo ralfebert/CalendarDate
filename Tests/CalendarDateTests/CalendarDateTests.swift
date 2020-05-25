@@ -32,6 +32,20 @@ final class CalendarDateTests: XCTestCase {
         XCTAssertEqual(CalendarDate(str), date)
     }
 
+    @available(OSX 10.12, *)
+    @available(iOS 10.0, *)
+    func testDateConversion() {
+        let calendarDate = CalendarDate(year: 2018, month: 5, day: 3)
+        let date = calendarDate.date
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.formatOptions = [.withFullDate, .withFullTime]
+        formatter.formatOptions.remove(.withTimeZone)
+        XCTAssertEqual(formatter.string(from: date), "2018-05-03T00:00:00")
+        XCTAssertEqual(CalendarDate(date: date), calendarDate)
+        XCTAssertEqual(CalendarDate(date: ISO8601DateFormatter().date(from: "2018-05-03T00:00:00Z")!), calendarDate)
+    }
+
     func testJSONCoding() throws {
         let date = CalendarDate(year: 2018, month: 5, day: 3)
 
