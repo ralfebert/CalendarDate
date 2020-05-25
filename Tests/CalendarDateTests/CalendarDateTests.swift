@@ -64,4 +64,9 @@ final class CalendarDateTests: XCTestCase {
         XCTAssertNotEqual(date, CalendarDate(year: 2018, month: 5, day: 4))
     }
 
+    func testToday() {
+        let today = CalendarDate.today
+        XCTAssertTrue(today.year > 2000)
+    }
+
 }

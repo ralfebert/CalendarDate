@@ -30,8 +30,8 @@ public struct CalendarDate: Equatable, Hashable {
 
     public let year, month, day: Int
 
-    public init() {
-        self.init(date: Date())
+    public static var today: CalendarDate {
+        CalendarDate(date: Date())
     }
 
     public init(year: Int, month: Int, day: Int) {
