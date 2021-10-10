@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2020 Ralf Ebert
+// Copyright (c) 2021 Ralf Ebert
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
 import XCTest
 
 final class CalendarDateTests: XCTestCase {
-
     func testStringConversion() {
         let date = CalendarDate(year: 2018, month: 5, day: 3)
         let str = "2018-05-03"
@@ -69,4 +68,10 @@ final class CalendarDateTests: XCTestCase {
         XCTAssertTrue(today.year > 2000)
     }
 
+    func testCalculations() {
+        XCTAssertEqual(CalendarDate(year: 2028, month: 1, day: 1), CalendarDate(year: 2018, month: 1, day: 1).adding(years: 10))
+        XCTAssertEqual(CalendarDate(year: 2018, month: 11, day: 1), CalendarDate(year: 2018, month: 1, day: 1).adding(months: 10))
+        XCTAssertEqual(CalendarDate(year: 2018, month: 3, day: 12), CalendarDate(year: 2018, month: 1, day: 1).adding(weeks: 10))
+        XCTAssertEqual(CalendarDate(year: 2018, month: 1, day: 11), CalendarDate(year: 2018, month: 1, day: 1).adding(days: 10))
+    }
 }

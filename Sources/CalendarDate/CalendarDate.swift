@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2020 Ralf Ebert
+// Copyright (c) 2021 Ralf Ebert
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,6 @@ import Foundation
  Includes support for formatting as a ISO 8601 string ('yyyy-mm-dd') and JSON coding.
  */
 public struct CalendarDate: Equatable, Hashable {
-
     public let year, month, day: Int
 
     public static var today: CalendarDate {
@@ -50,11 +49,9 @@ public struct CalendarDate: Equatable, Hashable {
     public var date: Date {
         DateComponents(calendar: Calendar.current, year: self.year, month: self.month, day: self.day).date!
     }
-
 }
 
 extension CalendarDate: LosslessStringConvertible {
-
     public init?(_ description: String) {
         if let date = Self.formatter.date(from: description) {
             self.init(date: date)
@@ -75,7 +72,6 @@ extension CalendarDate: LosslessStringConvertible {
 }
 
 extension CalendarDate: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let string = try container.decode(String.self)
@@ -94,5 +90,22 @@ extension CalendarDate: Codable {
         var container = encoder.singleValueContainer()
         try container.encode(self.description)
     }
+}
 
+public extension CalendarDate {
+    func adding(years: Int) -> CalendarDate {
+        CalendarDate(date: Calendar.current.date(byAdding: .year, value: years, to: self.date)!)
+    }
+
+    func adding(months: Int) -> CalendarDate {
+        CalendarDate(date: Calendar.current.date(byAdding: .month, value: months, to: self.date)!)
+    }
+
+    func adding(weeks: Int) -> CalendarDate {
+        CalendarDate(date: Calendar.current.date(byAdding: .weekOfYear, value: weeks, to: self.date)!)
+    }
+
+    func adding(days: Int) -> CalendarDate {
+        CalendarDate(date: Calendar.current.date(byAdding: .day, value: days, to: self.date)!)
+    }
 }
