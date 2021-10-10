@@ -93,19 +93,9 @@ extension CalendarDate: Codable {
 }
 
 public extension CalendarDate {
-    func adding(years: Int) -> CalendarDate {
-        CalendarDate(date: Calendar.current.date(byAdding: .year, value: years, to: self.date)!)
-    }
-
-    func adding(months: Int) -> CalendarDate {
-        CalendarDate(date: Calendar.current.date(byAdding: .month, value: months, to: self.date)!)
-    }
-
-    func adding(weeks: Int) -> CalendarDate {
-        CalendarDate(date: Calendar.current.date(byAdding: .weekOfYear, value: weeks, to: self.date)!)
-    }
-
-    func adding(days: Int) -> CalendarDate {
-        CalendarDate(date: Calendar.current.date(byAdding: .day, value: days, to: self.date)!)
+    func adding(years: Int? = nil, months: Int? = nil, weeks: Int? = nil, days: Int? = nil) -> CalendarDate {
+        let calendar = Calendar.current
+        let components = DateComponents(year: years, month: months, day: days, weekOfYear: weeks)
+        return CalendarDate(date: calendar.date(byAdding: components, to: self.date)!)
     }
 }
