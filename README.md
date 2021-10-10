@@ -7,6 +7,19 @@ let date = CalendarDate(year: 2018, month: 5, day: 3)
 let today = CalendarDate.today
 ```
 
+Converting Foundation `Date` values from and to `CalendarDate`:
+
+```swift
+let today = CalendarDate(date: Date.now)
+let date = today.date
+```
+
+Easy date calculations:
+
+```swift
+CalendarDate.today.adding(weeks: 3)
+```
+
 Formatting / parsing a ISO 8601 string ('yyyy-mm-dd'):
 
 ```swift
