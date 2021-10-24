@@ -18,6 +18,16 @@ Easy date calculations:
 
 ```swift
 CalendarDate.today.adding(weeks: 3)
+CalendarDate.today.adding(days: 3)
+
+CalendarDate.today.daysTowards(date: CalendarDate.tomorrow) // returns 1
+
+CalendarDate.tomorrow
+CalendarDate.yesterday
+
+date.isYesterday
+date.isToday
+date.isTomorrow
 ```
 
 Formatting / parsing a ISO 8601 string ('yyyy-mm-dd'):
