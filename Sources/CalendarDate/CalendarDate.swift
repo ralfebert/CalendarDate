@@ -24,14 +24,15 @@ import Foundation
 
 /**
  CalendarDate is a Swift type that represents a Date as year, month and day value.
- Includes support for formatting as a ISO 8601 string ('yyyy-mm-dd') and JSON coding.
+ Includes support for simple date calculations, formatting as a ISO 8601
+ string ('yyyy-mm-dd') and JSON coding.
+
+ Restriction: `CalendarDate` has no understanding of time zones. It is meant to be used
+ in places where the time zone doesn't matter. It uses the logic of Foundation's Date
+ to transform the current time into year/month/day based on TimeZone.current.
  */
 public struct CalendarDate: Equatable, Hashable {
     public let year, month, day: Int
-
-    public static var today: CalendarDate {
-        CalendarDate(date: Date())
-    }
 
     public init(year: Int, month: Int, day: Int) {
         self.year = year
@@ -92,10 +93,39 @@ extension CalendarDate: Codable {
     }
 }
 
+/// Date calculations
 public extension CalendarDate {
+    static var today: CalendarDate {
+        CalendarDate(date: Date())
+    }
+
     func adding(years: Int? = nil, months: Int? = nil, weeks: Int? = nil, days: Int? = nil) -> CalendarDate {
         let calendar = Calendar.current
         let components = DateComponents(year: years, month: months, day: days, weekOfYear: weeks)
         return CalendarDate(date: calendar.date(byAdding: components, to: self.date)!)
+    }
+
+    func daysTowards(date towardsDate: CalendarDate) -> Int {
+        Calendar.current.dateComponents([.day], from: self.date, to: towardsDate.date).day!
+    }
+
+    static var yesterday: CalendarDate {
+        self.today.adding(days: -1)
+    }
+
+    static var tomorrow: CalendarDate {
+        self.today.adding(days: 1)
+    }
+
+    var isToday: Bool {
+        self == CalendarDate.today
+    }
+
+    var isYesterday: Bool {
+        self == CalendarDate.yesterday
+    }
+
+    var isTomorrow: Bool {
+        self == CalendarDate.tomorrow
     }
 }

@@ -63,15 +63,47 @@ final class CalendarDateTests: XCTestCase {
         XCTAssertNotEqual(date, CalendarDate(year: 2018, month: 5, day: 4))
     }
 
-    func testToday() {
-        let today = CalendarDate.today
-        XCTAssertTrue(today.year > 2000)
-    }
-
-    func testCalculations() {
+    func testAdding() {
         XCTAssertEqual(CalendarDate(year: 2028, month: 1, day: 1), CalendarDate(year: 2018, month: 1, day: 1).adding(years: 10))
         XCTAssertEqual(CalendarDate(year: 2018, month: 11, day: 1), CalendarDate(year: 2018, month: 1, day: 1).adding(months: 10))
         XCTAssertEqual(CalendarDate(year: 2018, month: 3, day: 12), CalendarDate(year: 2018, month: 1, day: 1).adding(weeks: 10))
         XCTAssertEqual(CalendarDate(year: 2018, month: 1, day: 11), CalendarDate(year: 2018, month: 1, day: 1).adding(days: 10))
+
+        XCTAssertEqual(CalendarDate(year: 2018, month: 4, day: 11), CalendarDate(year: 2018, month: 1, day: 1).adding(days: 100))
+    }
+
+    func testDaysTowards() {
+        XCTAssertEqual(100, CalendarDate(year: 2018, month: 1, day: 1).daysTowards(date: CalendarDate(year: 2018, month: 4, day: 11)))
+        XCTAssertEqual(-100, CalendarDate(year: 2018, month: 4, day: 11).daysTowards(date: CalendarDate(year: 2018, month: 1, day: 1)))
+        XCTAssertEqual(1, CalendarDate(year: 2018, month: 1, day: 1).daysTowards(date: CalendarDate(year: 2018, month: 1, day: 2)))
+        XCTAssertEqual(-1, CalendarDate(year: 2018, month: 1, day: 1).daysTowards(date: CalendarDate(year: 2017, month: 12, day: 31)))
+        XCTAssertEqual(0, CalendarDate(year: 2018, month: 1, day: 1).daysTowards(date: CalendarDate(year: 2018, month: 1, day: 1)))
+    }
+
+    func testToday() {
+        let today = CalendarDate.today
+        XCTAssertTrue(today.year > 2000)
+        XCTAssertFalse(today.isYesterday)
+        XCTAssertTrue(today.isToday)
+        XCTAssertFalse(today.isTomorrow)
+
+        let date = CalendarDate(year: 2018, month: 5, day: 3)
+        XCTAssertFalse(date.isYesterday)
+        XCTAssertFalse(date.isToday)
+        XCTAssertFalse(date.isTomorrow)
+    }
+
+    func testTomorrow() {
+        XCTAssertEqual(1, CalendarDate.today.daysTowards(date: CalendarDate.tomorrow))
+        XCTAssertFalse(CalendarDate.tomorrow.isYesterday)
+        XCTAssertFalse(CalendarDate.tomorrow.isToday)
+        XCTAssertTrue(CalendarDate.tomorrow.isTomorrow)
+    }
+
+    func testYesterday() {
+        XCTAssertEqual(-1, CalendarDate.today.daysTowards(date: CalendarDate.yesterday))
+        XCTAssertTrue(CalendarDate.yesterday.isYesterday)
+        XCTAssertFalse(CalendarDate.yesterday.isToday)
+        XCTAssertFalse(CalendarDate.yesterday.isTomorrow)
     }
 }
